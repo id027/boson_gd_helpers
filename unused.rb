@@ -6,7 +6,7 @@ module GDUnused
 
     unused_facts = project.facts.pselect {|fact| fact.used_by('metric').empty?}
                                 .map {|m| [:fact, m.obj_id, m.title, m.identifier]}
-    unused_attrs = project.attributes.pselect {|fact| fact.used_by('metric').empty? && fact.used_by('reportDefintion').empty?}
+    unused_attrs = project.attributes.pselect {|attr| attr.used_by('metric').empty? && attr.used_by('reportDefinition').empty?}
                                      .map {|m| [:attribute, m.obj_id, m.title, m.identifier]}
     unused_attrs + unused_facts
   end
