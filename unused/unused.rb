@@ -45,7 +45,7 @@ module GDUnused
     puts "UNUSED ATTRIBUTES"
     puts Hirb::Helpers::AutoTable.render(unused_attr_without_date_attrs.map {|a| {type: :attribute, title: a.title, obj_id: a.obj_id, identifier: a.identifier}})
 
-    puts "UNUSED ATTRIBUTES"
+    puts "UNUSED FACTS"
     puts Hirb::Helpers::AutoTable.render(unused_facts.map {|a| {type: :fact, title: a.title, obj_id: a.obj_id, identifier: a.identifier}})
 
     puts "UNUSED DATE DIMENSIONS"

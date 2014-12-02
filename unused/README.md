@@ -1,0 +1,17 @@
+# Unused model objects
+
+This provides a list of unused objects in a model. It looks for Attributes, Facts and Date dimensions that are not used in any reports. It allows for generating MAQL DDL for dropping those.
+
+## Prerequisites
+You have to have ruby and boson installed.
+
+## Install
+If you have boson installing this script should be as easy as running
+
+  boson install path
+
+## Running
+Run command by running
+
+  boson unused PROJECT-ID
+
