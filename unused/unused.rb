@@ -1,9 +1,28 @@
+# Originally from https://raw.githubusercontent.com/fluke777/boson_gd_helpers/master/unused/unused.rb
 # Originally from https://raw.githubusercontent.com/fluke777/boson_gd_helpers/master/unused.rb
 module GDUnused
   def unused(project_id)
-    require 'gooddata'
-    require 'highline'
-    require 'active_support/core_ext/hash'
+    def install_gem(gem_name, gem_ver = nil)
+      begin
+        if gem_ver
+          gem gem_name, gem_ver
+        else
+          gem gem_name
+        end
+      rescue Gem::LoadError
+        if gem_ver
+          system("gem install #{gem_name} --version #{gem_ver}")
+        else
+          system("gem install #{gem_name}")
+        end
+        Gem.clear_paths
+      ensure
+        require gem_name
+      end
+    end
+    
+    install_gem('gooddata')
+    install_gem('highline')
     client = GoodData.connect
 
     def create_counter
