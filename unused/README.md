@@ -8,10 +8,10 @@ You have to have ruby and boson installed.
 ## Install
 If you have boson installing this script should be as easy as running
 
-  boson install path
+    boson install path
 
 ## Running
 Run command by running
 
-  boson unused PROJECT-ID
+    boson unused PROJECT-ID
 
