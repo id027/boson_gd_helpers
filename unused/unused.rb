@@ -1,7 +1,8 @@
-# Originally from https://raw.githubusercontent.com/fluke777/boson_gd_helpers/master/unused/unused.rb
-# Originally from https://raw.githubusercontent.com/fluke777/boson_gd_helpers/master/unused.rb
 module GDUnused
-  def unused(project_id)
+
+  options :login=>:string, :password=>:string, :server=>:string
+  # Processes a project and tells you what is not used and can be removed
+  def unused(project_id, options)
     def install_gem(gem_name, gem_ver = nil)
       begin
         if gem_ver
@@ -23,7 +24,7 @@ module GDUnused
     
     install_gem('gooddata')
     install_gem('highline')
-    client = GoodData.connect
+    client = options.empty? ? GoodData.connect : GoodData.connect(options)
 
     def create_counter
       x = 0
@@ -38,7 +39,7 @@ module GDUnused
 
     def generate_sync_maql(objs_to_generate_maql)
       objs_to_generate_maql.map {|x| x[:dataset]}.compact.uniq.each do |ds|
-        puts "SYNCHRONIZE {#{ds}};"
+        puts "SYNCHRONIZE {#{ds}} PRESERVE DATA;"
       end
     end
 
@@ -104,13 +105,13 @@ module GDUnused
     unused_facts = unused_facts.concat(unused_date_dims.map { |k, v| { counter: "", date_dimension_id: k, type: :date_dimension }})
 
     puts "UNUSED ATTRIBUTES"
-    puts Hirb::Helpers::AutoTable.render(unused_objects.select { |x| x[:type] == :attribute }.map {|x| x.except(:dataset)})
+    puts Hirb::Helpers::AutoTable.render(unused_objects.select { |x| x[:type] == :attribute }.map {|x| x.except(:dataset)}.sort_by {|x| x[:counter]})
 
     puts "UNUSED FACTS"
-    puts Hirb::Helpers::AutoTable.render(unused_objects.select { |x| x[:type] == :fact }.map {|x| x.except(:dataset)})
+    puts Hirb::Helpers::AutoTable.render(unused_objects.select { |x| x[:type] == :fact }.map {|x| x.except(:dataset)}.sort_by {|x| x[:counter]})
 
     puts "UNUSED DATE DIMENSIONS"
-    puts Hirb::Helpers::AutoTable.render(unused_objects.select { |x| x[:type] == :date_dimension }.map {|x| x.except(:dataset)})
+    puts Hirb::Helpers::AutoTable.render(unused_objects.select { |x| x[:type] == :date_dimension }.map {|x| x.except(:dataset)}.sort_by {|x| x[:counter]})
     puts
     response = HighLine.ask("Please enter numbers of the items you would like to generate drop MAQL DDL for as a list of comma separated numbers or enter for generating all. NO MAQL DDL will be automatically executed.", lambda { |str| str.split(/,\s*/) }) do |q|
     end
